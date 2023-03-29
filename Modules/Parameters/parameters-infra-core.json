@@ -1,0 +1,85 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "department": {
+        "value": "IT"
+      },
+      "parPcLawSolutions": {
+        "value": [
+          "AgentHealthAssistant",
+          "AntiMalware",
+          "AzureActivity",
+          "ChangeTracking",
+          "Security",
+          "SecurityInsights",
+          "ServiceMap",
+          "SQLAssesment",
+          "Updates",
+          "VMInsights"
+        ]
+       },
+    "appRoleIndex": { 
+      "value":  0
+    },
+    "saAccountCounts": {
+      "value": 0
+
+    },
+      "appRole": {
+        "value": [
+            {
+         "Name": "CoreTools",
+        "Shortname": "ct"
+            }
+        ]
+      },
+
+      "locationList": {
+        "value":{
+            "westus2": "azw2",
+            "eastus": "aze"
+        }
+      },
+      "addressPrefixes": {
+        "value": [
+          "10.5.0.0/20"
+        ]
+    },
+    "env": {
+        "value": "core"
+              },
+     "dnsServers": {
+        "value": [
+          "1.1.1.1",
+          "4.4.4.4"
+        ]
+      },
+      
+   "subnets": {
+        "value":[
+                {
+            "name": "CoreSnet",
+            "subnetPrefix": "10.5.3.0/24",
+            "delegation": "Microsoft.Web/serverfarms",
+            "privateEndpointNetworkPolicies": "disabled",
+            "serviceEndpoints":[
+              {
+                "service": "Microsoft.KeyVault",
+                "locations":[
+                  "*"
+                ]
+              },
+              {
+                "service": "Microsoft.Web",
+                "locations":[
+                  "*"
+                ]
+              }
+            ]
+          }
+        ]
+    }
+}
+}
+

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.15.31.15270",
+      "templateHash": "8756370394122585193"
+    }
+  },
+  "parameters": {
+    "namingConvention": {
+      "type": "string"
+    },
+    "location": {
+      "type": "string"
+    },
+    "tag": {
+      "type": "object"
+    },
+    "parPcLawSolutions": {
+      "type": "array"
+    },
+    "pcAutoId": {
+      "type": "string"
+    },
+    "namesuffix": {
+      "type": "string"
+    },
+    "resourceExists": {
+      "type": "bool"
+    },
+    "linkedResourceExists": {
+      "type": "bool"
+    },
+    "ExistorNot": {
+      "type": "string",
+      "defaultValue": "[if(parameters('linkedResourceExists'), 'existing', 'new')]"
+    }
+  },
+  "resources": [
+    {
+      "condition": "[not(parameters('resourceExists'))]",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2022-10-01",
+      "name": "[format('laW{0}', parameters('namingConvention'))]",
+      "properties": {
+        "sku": {
+          "name": "pergb2018"
+        },
+        "retentionInDays": 30,
+        "features": {
+          "legacy": 0,
+          "searchVersion": 1,
+          "enableLogAccessUsingOnlyResourcePermissions": true
+        },
+        "workspaceCapping": {
+          "dailyQuotaGb": "[json('-1.0')]"
+        },
+        "publicNetworkAccessForIngestion": "Enabled",
+        "publicNetworkAccessForQuery": "Enabled"
+      },
+      "location": "[parameters('location')]",
+      "tags": "[parameters('tag')]"
+    },
+    {
+      "copy": {
+        "name": "resPcLawSolutions",
+        "count": "[length(parameters('parPcLawSolutions'))]",
+        "mode": "serial",
+        "batchSize": 1
+      },
+      "condition": "[not(empty(parameters('parPcLawSolutions')))]",
+      "type": "Microsoft.OperationsManagement/solutions",
+      "apiVersion": "2015-11-01-preview",
+      "name": "[format('{0}({1})', parameters('parPcLawSolutions')[copyIndex()], format('laW{0}', parameters('namingConvention')))]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "workspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', format('laW{0}', parameters('namingConvention')))]"
+      },
+      "plan": {
+        "name": "[format('{0}({1})', parameters('parPcLawSolutions')[copyIndex()], format('laW{0}', parameters('namingConvention')))]",
+        "product": "[format('OMSGallery/{0}', parameters('parPcLawSolutions')[copyIndex()])]",
+        "publisher": "Microsoft",
+        "promotionCode": " "
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', format('laW{0}', parameters('namingConvention')))]"
+      ],
+      "metadata": {
+        "description": "la"
+      }
+    },
+    {
+      "condition": "[equals(parameters('ExistorNot'), 'new')]",
+      "type": "Microsoft.OperationalInsights/workspaces/linkedServices",
+      "apiVersion": "2020-08-01",
+      "name": "[format('{0}/{1}', format('laW{0}', parameters('namingConvention')), format('{0}-{1}', format('laW{0}', parameters('namingConvention')), parameters('namesuffix')))]",
+      "properties": {
+        "resourceId": "[parameters('pcAutoId')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', format('laW{0}', parameters('namingConvention')))]"
+      ]
+    }
+  ],
+  "outputs": {
+    "linkedEsist": {
+      "type": "string",
+      "value": "[parameters('ExistorNot')]"
+    },
+    "pclawid": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.OperationalInsights/workspaces', format('laW{0}', parameters('namingConvention')))]"
+    },
+    "pclawname": {
+      "type": "string",
+      "value": "[format('laW{0}', parameters('namingConvention'))]"
+    }
+  }
+}

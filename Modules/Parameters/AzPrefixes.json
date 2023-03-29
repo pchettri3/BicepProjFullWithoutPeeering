@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "storageAccountPrefix": "st",
+      "appServicePrefix": "app",
+      "appServicePlanPrefix": "asp",
+      "functionAppPrefix": "func",
+      "diskencryptionsetPrefix": "des",
+      "virtualmachinePrefix": "vm",
+      "virtualnetworkPeeringPrefix": "peer",
+      "virtualnetworkPrefix" : "vnet",
+      "VirtualWAN": "vwan",
+      "vpnGatewayPrefix": "vpng",
+      "vpnconnectionPrefix": "vcn",
+      "vpnsitePrefix": "vst",
+      "vpnNetworkGatewayPrefix": "app",
+      "webApplicatoinFirewallPrefix": "waf",
+      "availabilitySetPrefix": "avail",
+      "managedDiskOsPrefix": "app",
+      "managedDiskDataPrefix": "app",
+      "fileSharePrefix": "bkpol",
+      "backupVaultPolicyPrefix": "bkpol",
+      "backupVaultNamePrefix": "bvault",
+      "resourceGroupPrefix": "rg",
+      "logAnalyticsWorkspacePrefix": "log",
+      "automationAccountPrefix": "aa",
+      "subNetPrefix": "snet",
+      "NetworSecurityGroup" : "nsg",
+      "KeyVault" : "kv",
+      "RecoveryServicesvault" : "rsv"
+    }
+  } 

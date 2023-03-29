@@ -1,0 +1,73 @@
+
+param vnetNames array = ['vnet1', 'vnet2']
+param vnetCidrs array = ['10.0.0.0/16', '10.1.0.0/16']
+param subnetNames array = ['subnet1', 'subnet2', 'subnet3']
+param subnetCidrs array = ['10.0.1.0/24', '10.0.2.0/24', '10.0.3.0/24']
+
+module vnets './modules/vnets.bicep' = {
+  name: 'vnets'
+  params: {
+    vnetNames: vnetNames
+    vnetCidrs: vnetCidrs
+    subnetNames: subnetNames
+    subnetCidrs: subnetCidrs
+  }
+}
+param vnetNames array = ['vnet1', 'vnet2']
+param vnetCidrs array = ['10.0.0.0/16', '10.1.0.0/16']
+param subnetNames array = ['subnet1', 'subnet2', 'subnet3']
+param subnetCidrs array = ['10.0.1.0/24', '10.0.2.0/24', '10.0.3.0/24']
+
+module vnets './modules/vnets.bicep' = {
+  name: 'vnets'
+  params: {
+    vnetNames: vnetNames
+    vnetCidrs: vnetCidrs
+    subnetNames: subnetNames
+    subnetCidrs: subnetCidrs
+  }
+}
+
+
+
+
+param vnetNames array
+param vnetCidrs array
+param subnetNames array
+param subnetCidrs array
+
+resource vnets 'Microsoft.Network/virtualNetworks@2020-11-01' = {
+  name: '${vnetNames[copyIndex()]}'
+  location: resourceGroup().location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [vnetCidrs[copyIndex()]]
+    }
+  }
+  copy: {
+    name: 'vnetsCopy'
+    count: length(vnetNames)
+  }
+}
+
+module subnets './subnets.bicep' = [for (i in range(0, length(vnetNames))) {  name: 'subnets-${i}'  params: {    parentResourceId: vnets[i].id
+    subnetNames: subnetNames
+    subnetCidrs: subnetCidrs
+  }param parentResourceId string
+  param subnetNames array
+  param subnetCidrs array
+  
+  resource subnets 'Microsoft.Network/virtualNetworks/subnets@2020-11-01' = [for (i in range(0, length(subnetNames))) {
+    name: '${subnetNames[i]}-${copyIndex()}'
+    parent: parentResourceId
+    properties: {
+      addressPrefix: subnetCidrs[i]
+    }
+    copy: {
+      name: 'subnetsCopy'
+      count: 3
+    }
+  }]
+  
+}]
+

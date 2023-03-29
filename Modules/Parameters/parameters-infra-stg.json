@@ -1,0 +1,128 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "department": {
+      "value": "IT"
+    },
+
+  "appRoleIndex": { 
+    "value":  3
+  },
+  
+  "saAccountCounts": {
+    "value": [
+      1
+    ]
+  },
+
+    "appRole": {
+      "value": [
+          {
+        "Name": "Applicatoin Server",
+        "Shortname": "ap"
+      },
+      {
+      "Name": "Active Directory",
+        "Shortname": "dc"
+  },
+  {
+      "Name": "Tool server",
+      "Shortname": "tool"
+  },
+  {
+       "Name": "dhcp server",
+       "Shortname": "dhcp"
+    }
+  ]
+  },
+    "env": {
+      "value": "dev"
+            },
+ "virtualNetworks": {
+        "value": [
+          {
+             "name":  "hubVnet",
+            "addressPrefixes" : ["10.25.0.0/18"],
+              "subnets": [
+                {
+                  "name": "CoreSubnet",
+                 "addressPrefix": "10.25.1.0/24"
+               },
+              {
+               "name": "ToolSubnet",
+                "addressPrefix": "10.25.2.0/24"
+              },
+              {
+                "name": "DirectoryServiceSubnet",
+                 "addressPrefix": "10.25.3.0/24"
+               }
+                  ]
+            },
+      
+      
+      {
+        "name":  "AppVnet",
+        "addressPrefixes" : ["10.33.0.0/18"],
+        "subnets": [
+              {
+                "name": "AppSubnet",
+               "addressPrefix": "10.33.1.0/24"
+                },
+             {
+               "name": "ApptoolSubnet",
+               "addressPrefix": "10.33.2.0/24"
+              },
+              {
+              "name": "AppDirServiceSubnet",
+              "addressPrefix": "10.33.3.0/24"
+            }
+                       ]
+         },
+       {
+      "name":  "dbVnet",
+      "addressPrefixes" : ["10.45.0.0/18"],
+      "subnets": [
+              {
+                 "name": "dbSubnet",
+               "addressPrefix": "10.45.1.0/24"
+              },
+             {
+             "name": "dbToolSubnet",
+             "addressPrefix": "10.45.2.0/24"
+             }
+            
+                      ]
+      },
+      {
+    "name":  "wvdVnet",
+    "addressPrefixes" : ["10.57.0.0/18"],
+    "subnets": [
+             {
+               "name": "wvdSubnet",
+             "addressPrefix": "10.57.1.0/24"
+             },
+            {
+             "name": "wvdToolSubnet",
+           "addressPrefix": "10.57.2.0/24"
+             }
+           ]
+       }]
+          },
+  
+    "locationList": {
+      "value":{
+          "westus2": "azw2",
+          "eastus": "aze"
+      }
+    },
+  
+   "dnsServers": {
+      "value": [
+        "1.1.1.1",
+        "4.4.4.4"
+      ]
+    }  
+         }
+        }
+
