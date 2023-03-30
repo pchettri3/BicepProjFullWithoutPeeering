@@ -10,6 +10,7 @@ param vnet object = virtualNetworks[0]
 param virtualNetworks array ///added the param on 3/26/23 
 param dnsServers array
 param subNets array 
+
 //var subnetLength = length(subNets)
 
 // param virtualNetworks array
@@ -61,7 +62,7 @@ resource pcVnet 'Microsoft.Network/virtualNetworks@2022-07-01' = { //[ for (vnet
       id: pcnsg.id
     location: location
     }
-   //Assigns private endpoint pol if the subnet privateEndpointNetworkPolicies states enabled or else null
+   //Assigns private endpoint pool if the subnet privateEndpointNetworkPolicies states enabled or else null
    privateEndpointNetworkPolicies: contains(subnet, 'privateEndpointNetworkPolicies') ? subnet.privateEndpointNetworkPolicies : null
    privateLinkServiceNetworkPolicies: contains(subnet, 'privateLinkServiceNetworkPolicies') ? subnet.privateLinkServiceNetworkPolicies : null
            

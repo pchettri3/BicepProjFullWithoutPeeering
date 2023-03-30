@@ -79,7 +79,7 @@ module pcLaw 'Shared/pcLaw.bicep'= if (enableSS) {
     pcAutoId: pcAutomation.outputs.pcAutomationAccountId
    tag: tags
     location:location
-    namesuffix : namesuffix
+   // namesuffix : namesuffix
     resourceExists  : inlineScript.outputs.resourceExists
     linkedResourceExists : inlineScript.outputs.linkedResourceExists
 
