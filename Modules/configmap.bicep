@@ -1,4 +1,4 @@
-var environmentConfigurationMap = {
+/*var environmentConfigurationMap = {
   Production: {
     appServicePlan: {
       sku: {
@@ -95,3 +95,4 @@ var environmentConfigurationMap = {
     }
   }
 }
+*/

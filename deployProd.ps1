@@ -21,4 +21,3 @@ $Parameters = @{
     }
 New-AzSubscriptionDeployment @parameters -verbose -Location "westus2" 
 
-# ResourceGroupName = "projNeudBaseRg"

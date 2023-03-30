@@ -98,33 +98,19 @@ module demoResouceGroup 'Modules/pcResouceGroup.bicep' = {
   name: 'RGDeployment-${deploymentsuffix}' 
                                     
   params:{    
-    //index : locationIndex
-   // locationlist: locationList[locationIndex].shortname
     location : location 
-    
-    // addressPrefix:addressPrefixes[0]
-       // namingConvention: '${localNamingRG}-core[0]'
-       
-     // replacing the resource name place holder with the RG group prefix
+
     demoRgName : 'demoRG-${replace(namingConvention.outputs.outputObjects.resourceNamePlaceHolder,'[PC]',sharedNamePrefixes.parameters.resourceGroupPrefix)}' // cannot be the value in the primary block the variable has not been generated
     saNamingPrefix: namingConvention.outputs.outputObjects.saAccountNamePlaceHolder
     tags: tagValues
     virtualNetworks: virtualNetworks
-    //addressPrefixes: addressPrefixes
     dnsServers: dnsServers
-    //subNets : subNets
-    //vnet : vnet
     environment: env
     saAccountCounts : saAccountCounts  
     resourceNamingPlacHolder: namingConvention.outputs.outputObjects.resourceNamePlaceHolder
-    // replacing the subnet place holder with the subnet prefix
-    //NetworkNamePrefix :  namingConvention.outputs.outputObjects.restrictedNamePlaceholder
-    // coreRgName: coreResourceGroup.id
-    restrictedNamingPlaceHolder : namingConvention.outputs.outputObjects.restrictedNamePlaceholder
+     restrictedNamingPlaceHolder : namingConvention.outputs.outputObjects.restrictedNamePlaceholder
     
   vmCountIndex : vmCountIndex
-    // snetLength : snetLength (planning to apply loop based on subnet array length when the code expands)
-    //environment : env
    adminUsername: adminUsername
     adminPassword: adminPassword
 
@@ -137,13 +123,11 @@ module sharedModule 'Modules/pcShared.bicep' = if(EnableSSResouce) {
   name: 'Shared-${deploymentsuffix}'
   params: {
     location: location
-   // resourceNamingPlacHolder: namingConvention.outputs.resourceNameConv
-    environment : env
-   // parPcLawSolutions: parPcLawSolutions TEMP{TEST}
+     environment : env
     tags: tagValues
     restrictedNamingPlaceHolder : namingConvention.outputs.outputObjects.restrictedNameSSPlaceholder
     namesuffix : 'lnss'
-    //namesuffix: uniqueString(substring(toLower(coreResourceGroup.id), 0, min(length(coreResourceGroup.name), 4)))
+
   }
 }
 

@@ -1,9 +1,9 @@
-param localVirtualNetworkid string
+/*param localVirtualNetworkid string
 param peerName string
 
 
 resource pcPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2022-07-01' = {
-  name: peerName
+  name: hubToAppVnet
   properties: {
     
     allowForwardedTraffic: false
@@ -15,3 +15,5 @@ resource pcPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@202
 useRemoteGateways:false
   }
 }
+
+*/
