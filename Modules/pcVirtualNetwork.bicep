@@ -10,18 +10,7 @@ param vnet object = virtualNetworks[0]
 param virtualNetworks array ///added the param on 3/26/23 
 param dnsServers array
 param subNets array 
-
-//var subnetLength = length(subNets)
-
-// param virtualNetworks array
-
-// param nsgSecurityRules object
-
-// param snetLength int
-
-// param virtualNetworkPeerings array = []
-
-// var nsgSecurityRules = loadJsonContent('./Parameters/nsg-rules.json').securityRules  ***MESSED UP DUE .securityRules****
+var nsgname = nsgNamePrefix
 @description('load the content of of JSON parameter file to the variable')
 var nsgSecurityRules  = json(loadTextContent('./Parameters/nsg-rules.json')).securityRules
 var dnsServersvar  = {
@@ -56,31 +45,34 @@ resource pcVnet 'Microsoft.Network/virtualNetworks@2022-07-01' = { //[ for (vnet
   properties: {
     addressPrefix: subnet.addressPrefix //subnet.addressPrefix
         //Assigns private serviceEndpoints if the subnet serviceEndpoints states enabled or else null
-  serviceEndpoints: contains(subnet, 'serviceEndpoints') ? subnet.serviceEndpoints : []
+  serviceEndpoints: contains(subnet, 'serviceEndpoints') ? subnet.serviceEndpoints : [] 
   delegations: contains(subnet, 'delegation') ? subnet.delegation : []
-    networkSecurityGroup: {
-      id: pcnsg.id
-    location: location
-    }
-   //Assigns private endpoint pool if the subnet privateEndpointNetworkPolicies states enabled or else null
+
+  // reference for fix https://github.com/Azure/bicep/issues/387
+  //networkSecurityGroup: subnet.Name == 'GateWaySubnet' || 'FirewallSubnet' ? json('null') : {id: resourceId('Microsoft.Network/networkSecurityGroups', '${nsgname}')}
+  networkSecurityGroup: subnet.Name == 'GateWaySubnet' || subnet.Name == 'FirewallSubnet' ? json('null') : {id: resourceId('Microsoft.Network/networkSecurityGroups', '${nsgname}')}
+
+ // networkSecurityGroup: subnet.Name == 'GateWaySubnet' ? json('null') : {id: resourceId('Microsoft.Network/networkSecurityGroups', '${nsgname}-${subnet.name}')}
+
    privateEndpointNetworkPolicies: contains(subnet, 'privateEndpointNetworkPolicies') ? subnet.privateEndpointNetworkPolicies : null
    privateLinkServiceNetworkPolicies: contains(subnet, 'privateLinkServiceNetworkPolicies') ? subnet.privateLinkServiceNetworkPolicies : null
-           
-  }
-          } ]
-
+          
+  } 
+  } ] 
+          } 
+                                                           
 //        }
     
       }//]
-    }
+    
 
 
 output subnetsall array = [for subnet in  vnet.subNets: subnet] // [for subnet in subNets: vnet.subnets]
 //output loopsubnet array = vnet.subnets
 
-/*      
-module peerToCore 'pcPeering.bicep' = if (peertoCore) {
-  name: 'Peer-to-Core'
+/*
+module peerTohub 'pcPeering.bicep' = if (peerToHub) {
+  name: 'Peer-to-hub'
   params: {
     localVirtualNetworkid : pcVirtualNetwork.id
     peerName: '${pcVirtualNetwork}peer-to-core'

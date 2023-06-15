@@ -5,6 +5,19 @@
     "department": {
       "value": "IT"
     },
+    "Owner": {
+      "value": "IT-Security"
+    },
+    "Author": {
+      "value": "Bicep"
+    },
+    "CostCenter": {
+      "value": "IT003"
+    },
+    "Email": {
+      "value": "prasant.chet@xxx.com"
+    },
+
 
   "appRoleIndex": { 
     "value":  3

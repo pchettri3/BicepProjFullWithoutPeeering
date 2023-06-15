@@ -1,4 +1,3 @@
-//param pcnamingConvention string
 param location string
 param environment string
 param tags object
@@ -7,7 +6,6 @@ param deploymentMI string = 'resourceDeployMI'
 param deploymentsub string = subscription().subscriptionId
 param usmiRG string = 'myrg1'
 param restrictedNamingPlaceHolder string
-//param resourceGroupid string = resourceGroup().id
 param resourceGroupname string = resourceGroup().name
 var existingLawName = 'laW${restrictedNamingPlaceHolder}${sharedNamePrefixes.parameters.logAnalyticsWorkspacePrefix}'
 // param resourceNamingPlacHolder string
@@ -21,8 +19,6 @@ var sharedNamePrefixes = loadJsonContent('./Parameters/AzPrefixes.json')
   'SecurityInsights'
   'ServiceMap'
   'SQLAssesment'
-  //'Updates'
-  //'VMInsights'
   'AgentHealthAssistant'
   'AntiMalware'
 ])
@@ -79,7 +75,6 @@ module pcLaw 'Shared/pcLaw.bicep'= if (enableSS) {
     pcAutoId: pcAutomation.outputs.pcAutomationAccountId
    tag: tags
     location:location
-   // namesuffix : namesuffix
     resourceExists  : inlineScript.outputs.resourceExists
     linkedResourceExists : inlineScript.outputs.linkedResourceExists
 
@@ -95,7 +90,7 @@ module keyVault 'Shared/pcKeyVault.bicep' = if (enableSS) {
     
     }
   }
-module recovery 'Shared/pcRecoveryVault.bicep' = {
+module recovery 'Shared/pcRecoveryVault.bicep' = if (enableSS) {
   name: 'deploy-rsv${aaDate}${namesuffix}'
      params: {
     location: location
@@ -104,5 +99,6 @@ module recovery 'Shared/pcRecoveryVault.bicep' = {
     namesuffix : namesuffix
   }
 }
+
 
 

@@ -34,7 +34,7 @@ name: 'depoy-${saNamingPrefix}deploymentdate${i}'
 
 params:{
   location: location
-  saAccountName: '${saNamingPrefix}psa0${i}'
+  saAccountName:  replace(saNamingPrefix,'PC', resourceNamePrefix.parameters.storageAccountPrefix)
   tags: tags
 }
 }]
@@ -73,13 +73,14 @@ var wvdVnetId  = '${vnetResourcePrefix}${pcVirtualNetwork[3].name}/subnets/'
 
 var vnetResourcePrefix = '${resourcegId}/providers/Microsoft.Network/virtualNetworks/'
 
-var coreSubnetName = pcVirtualNetwork[0].outputs.subnetsall[0].name
-var coreSubnetId = '${hubVnetId}${coreSubnetName}'
-var hubToolSubnetName = pcVirtualNetwork[0].outputs.subnetsall[1].name
-var hubToolSubnetId = '${hubVnetId}${hubToolSubnetName}'
-var hubDSSubnetName = pcVirtualNetwork[0].outputs.subnetsall[2].name
-var hubDsSubnetId = '${hubVnetId}${hubDSSubnetName}'
-
+var managementSubnetName = pcVirtualNetwork[0].outputs.subnetsall[0].name
+var managementSubnetID = '${hubVnetId}${managementSubnetName}'
+var SharedSubnetName = pcVirtualNetwork[0].outputs.subnetsall[1].name
+var SharedSubnetId = '${hubVnetId}${SharedSubnetName}'
+var dmzSubnetName = pcVirtualNetwork[0].outputs.subnetsall[2].name
+var dmzSubnetId = '${hubVnetId}${dmzSubnetName}'
+var gatewaySubnetName = pcVirtualNetwork[0].outputs.subnetsall[2].name
+var gatewaySubneId = '${hubVnetId}${gatewaySubnetName}'
 
 var appSubnetName = pcVirtualNetwork[1].outputs.subnetsall[0].name
 var appSubnetId = '${appVnetId}${appSubnetName}'
@@ -103,13 +104,15 @@ var wvdToolSubnetId = '${wvdVnetId}${wvdToolSubnetName}'
 
 var ouputNetworkObjects = {
  
-  coreSubnetName : coreSubnetName
-  coreSubnetID : coreSubnetId
+  managementSubnetName : managementSubnetName
+  managementSubnetID : managementSubnetID
 
-  hubToolSubnetName : hubToolSubnetName
-  hubToolSubnetID : hubToolSubnetId
-  hubDsSubnetName : hubDSSubnetName
-  hubDsSubnetID : hubDsSubnetId
+  SharedSubnetName : SharedSubnetName
+  SharedSubnetId : SharedSubnetId
+  dmzSubnetName : dmzSubnetName
+  dmzSubnetId : dmzSubnetId
+  gatewaySubnetName : gatewaySubnetName
+  gatewaySubneId : gatewaySubneId
 
   appDsSubnetName : appSubnetName
   appDsSubnetId : appSubnetId
@@ -149,8 +152,8 @@ scope: pcResourceGroup
     adminUsername: adminUsername
     adminPassword: adminPassword
 
-    coreSubnetName :   coreSubnetName //alternate option pcVirtualNetwork[0].outputs.subnetsall[0].name  // pcVirtualNetwork[0].outputs.subnetsall[0].name
-    coreSubnetID: coreSubnetId // aternate option ${hubVnetId}${pcVirtualNetwork[0].outputs.subnetsall[0].name}'
+    coreSubnetName :   managementSubnetName //alternate option pcVirtualNetwork[0].outputs.subnetsall[0].name  // pcVirtualNetwork[0].outputs.subnetsall[0].name
+    coreSubnetID: managementSubnetID // aternate option ${hubVnetId}${pcVirtualNetwork[0].outputs.subnetsall[0].name}'
     
        OSdiskname : '${restrictedNamingPlaceHolder}disk${i}'
        datadiskname:  '${restrictedNamingPlaceHolder}datDisk${i}'

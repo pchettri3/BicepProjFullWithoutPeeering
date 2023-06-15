@@ -2,6 +2,28 @@
   // See https://aka.ms/bicep/config for more information on Bicep configuration options
   // Press CTRL+SPACE/CMD+SPACE at any location to see Intellisense suggestions
   
+    "cloud": {
+      "currentProfile": "AzureCloud",
+      "profiles": {
+        "AzureCloud": {
+          "resourceManagerEndpoint": "https://management.azure.com",
+          "activeDirectoryAuthority": "https://login.microsoftonline.com"
+        },
+        "AzureChinaCloud": {
+          "resourceManagerEndpoint": "https://management.chinacloudapi.cn",
+          "activeDirectoryAuthority": "https://login.chinacloudapi.cn"
+        },
+        "AzureUSGovernment": {
+          "resourceManagerEndpoint": "https://management.usgovcloudapi.net",
+          "activeDirectoryAuthority": "https://login.microsoftonline.us"
+        }
+      },
+      "credentialPrecedence": [
+        "AzurePowerShell",
+        "AzureCLI"       
+      ]
+    },
+  
     "analyzers": {
       "core": {
         "enabled": true,
@@ -87,5 +109,15 @@
           }
         }
       }
-    }
-  }
+    },
+    "moduleAliases": {
+      "br": {
+        "pcNamingModule": {
+          "registry": "pcmoduleregistry.azurecr.io",
+          "modulePath": "bicep/modules"
+ 
+      }
+
+        }
+      }
+}

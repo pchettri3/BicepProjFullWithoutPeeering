@@ -1,19 +1,29 @@
-/*param localVirtualNetworkid string
-param peerName string
+param subscriptionID string
+param resourceGroupName string
+param vNetName string
+param vNetNameHub string 
+param peeringName string
 
 
-resource pcPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2022-07-01' = {
-  name: hubToAppVnet
-  properties: {
-    
-    allowForwardedTraffic: false
-    allowGatewayTransit:false
-    allowVirtualNetworkAccess:true
-    remoteVirtualNetwork:{
-      id:localVirtualNetworkid
-    }
-useRemoteGateways:false
-  }
+resource VNETHUB 'Microsoft.Network/virtualNetworks@2020-11-01' existing = {
+  name: pcResourceGroup.output.ouputNetworkObjects.coreSubnetName
 }
 
-*/
+resource VNET 'Microsoft.Network/virtualNetworks@2020-11-01' existing = {
+  name: vNetName
+  scope: resourceGroup(subscriptionID,resourceGroupName)
+}
+
+resource VNETPeering 'Microsoft.Network/virtualNetworks/virtualNetworkPeerings@2017-10-01' = {
+  name: peeringName
+  parent: VNETHUB
+  properties: {
+    allowVirtualNetworkAccess: true
+    allowForwardedTraffic: true
+    allowGatewayTransit: false
+    useRemoteGateways: false
+    remoteVirtualNetwork: {
+      id: VNET.id
+    }
+  }
+}

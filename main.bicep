@@ -32,7 +32,15 @@ param virtualNetworks array
 param appShortName string = appRole[appRoleIndex].Shortname
 @description('generates appRolename  to be applied to namingConv module')
 param appRoleName string = appRole[appRoleIndex].Name
+param CostCenter string
+param Owner string
 
+
+@allowed([
+  'Bicep'
+])
+param Author string
+param Email string
 //param vnet int
 // param addressPrefix string
 param vmCountIndex int
@@ -53,10 +61,13 @@ var EnableSSResouce  = env == 'prod'
 
  @description('Resouce tag that would be passed for other resouce modules')
 param tagValues object = {
-  createdBy: 'prasant.chettri@xxxx.com'  //if az cli then it is deployed from the pipeline 
+  email: Email
   environment: env
   deploymentDate: currentDate
   product: appRoleName
+  Owner: Owner
+  costcenter: CostCenter
+  Author: Author
  }
 
  @description('Existing resource called to build the naming prefix before any other resource gets deployed')
@@ -68,7 +79,10 @@ resource coreResourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01'= { //
 output coreRG string = coreResourceGroup.id
 
 @description('NamingConvention MODULE BLOCK')
-module namingConvention './modules/namingConvention.bicep' = {
+
+module namingConvention 'br/pcNamingModule:naming:1.0.1' = {
+/*
+module namingConvention './modules/namingConvention.bicep' = { */
  name: '${env}-deployNaming'
  scope: coreResourceGroup
  params: {
@@ -79,7 +93,7 @@ module namingConvention './modules/namingConvention.bicep' = {
    // location : locationList[locationIndex].location  *** no need for location as location shortname is used to generate name
    locationShortName: locationShortName// 0 west2, 1 east, 2 westus, 3 central, 4 west3
    }
-}
+} 
 
 
 output storageAccountname string = namingConvention.outputs.outputObjects.saAccountNamePlaceHolder
@@ -94,7 +108,7 @@ param deploymentsuffix string = '${env}${deploymentdate}'
 // namesModule.outputs.outputobject.outputvariable1
 
 @description('RG deployment module')
-module demoResouceGroup 'Modules/pcResouceGroup.bicep' = {
+module hubResouceGroup 'Modules/pcResouceGroup.bicep' = {
   name: 'RGDeployment-${deploymentsuffix}' 
                                     
   params:{    

@@ -12,6 +12,9 @@ param appRoleShortName string
 //param appRoleName string
 param locationShortName string
 param index int = length(locationShortName)
+
+
+
 // ****This would be more appropriate prefix for production env to extract only single letter out of envrironment instead of three letters to create prefix
 // param locationprefix = substring(environment,0,1)
 
@@ -25,10 +28,9 @@ param index int = length(locationShortName)
 // This is used for resources with a limited length to the name.
 // There is a risk to doing at this way, as results might be non-desirable.
 // An alternative might be to have these values be a parameter
-@description('Azure naming prefixes')
-var azNamePrefixes = loadJsonContent('./Parameters/AzPrefixes.json')
+
 // We only need the first three letter of the environment, so we substract it.
-//var servicePrefix = azNamePrefixes.storageAccountPrefix.name
+// var servicePrefix = azNamePrefixes.storageAccountPrefix.name
 // var appRole = environmentInfo.parameters.appRole.value
 // var environmentLetter = substring(environment,0,2)
 
@@ -51,7 +53,7 @@ var outputObjects = {
   // This line constructs the restricted resource naming convention. 
   restrictedNameSSPlaceholder : take(toLower('sharedservices001'),12)
     // This line constructs the restricted resource naming convention for the storage account 
-   saAccountNamePlaceHolder : take(toLower('relli${department}${environment}${appRoleShortName}${azNamePrefixes.parameters.storageAccountPrefix}${padLeft(index,2,'0')}'),20)
+   saAccountNamePlaceHolder : take(toLower('relli${department}${environment}${appRoleShortName}PC${padLeft(index,2,'0')}'),20)
    currentdate : currentDate
    restrictedNamePlaceholder : take(toLower('${department}${environment}${appRoleShortName}'),11)
 }
